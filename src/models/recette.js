@@ -9,12 +9,32 @@ class Recette extends Model {
     this.collection = 'recettes';
 
     this.schema = {
-      titre: String,
-      description: String,
-      picture: String,
-      note: Number,
-      countNote: Number,
-      link: String,
+      title: {
+        required: true, 
+        type : String
+      },
+      description: {
+        required: false, 
+        type : String
+      },
+      picture: {
+        required: false, 
+        type : String
+      },
+      note: {
+        required: false, 
+        type : Number,
+        default: 0
+      },
+      countNote:  {
+        required: false, 
+        type : String,
+        default: 0
+      },
+      link:  {
+        required: false, 
+        type : String
+      },
     };
   }
 };

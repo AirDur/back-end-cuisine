@@ -1,42 +1,47 @@
 "use strict"
 
 const Action = require('@fmguimaraes/micronode').Action;
-//todo import RESPONSES
+const RESPONSES = require('../constants/responses');
 
 const Recette = require('../models/recette');
-const RecetteValidation = require('../validations/recette');
 
 class Recettes extends Action {
     constructor(server) {
         super(server)
         this.server = server;
         this.model = new Recette(this.server);
-        this.validation = new RecetteValidation(this.server);
 
         this.eventEmitter.on('recette.create', this.create.bind(this));
+        this.eventEmitter.on('recette.read', this.read.bind(this));
+        this.eventEmitter.on('recette.update', this.update.bind(this));
+        this.eventEmitter.on('recette.delete', this.delete.bind(this));
     }
 
     async create(req, res) {
-        let answerSent = false,
-            newRecette = req.body;
+        let code = RESPONSES.HTTP_STATUS.OK,
+            newRecette = req.body,
+            result = null,
+            missingField = null;
 
         try {
-            await this.validation.verifyData(newRecette);
-        } catch(err) {
-            answerSent = true;
-            this.sendAnswer(res, RESPONSES.HTTP_STATUS.BAD_REQUEST,
-                        RESPONSES.UNABLE_TO_CREATE_RECETTE, err.message);
-        }
-
-        if (!answerSent) {
-            let creationResponse = await this.create({ ...newRecette }, "recette");
-
-            if (creationResponse.recette) {
-                this.sendAnswer(res, RESPONSES.HTTP_STATUS.OK, creationResponse.recette);
-            } else {
-                this.sendAnswer(res, RESPONSES.HTTP_STATUS.INTERNAL_SERVER_ERROR, RESPONSES.UNABLE_TO_CREATE_RECETTE);
+            result = await this.model.create(newRecette);
+            result = RESPONSES.RECETTE_CREATED;
+        } catch (err) {
+            code = RESPONSES.HTTP_STATUS.INTERNAL_SERVER_ERROR;
+            result = RESPONSES.UNABLE_TO_CREATE_RECETTE;
+            
+            if(this.isValidationError(err)) {
+                code = RESPONSES.HTTP_STATUS.BAD_REQUEST;
+                result = RESPONSES.VALIDATION_ERROR;
+                missingField = this.getMissingFieldName(err.errorMsg.errors);
             }
         }
+        
+        this.sendAnswer(res, code, result, missingField);
+    }
+
+    isValidationError(err) {
+        return err.errorMsg.name === ERROR.MONGO.VALIDATION;
     }
 };
 

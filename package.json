@@ -1,6 +1,6 @@
 {
   "name": "@cooking_todo/back_end",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Back-End to the app Cooking Todo. It is an application that permit to create a collection of restaurant and recipes",
   "license": "MIT",
   "repository": {
