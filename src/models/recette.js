@@ -1,7 +1,6 @@
 "use strict"
 
 const Model = require('@fmguimaraes/micronode').Model;
-// import { Mongoose = require('mongoose');
 
 class Recette extends Model {
   constructor(server) {
@@ -10,7 +9,12 @@ class Recette extends Model {
     this.collection = 'recettes';
 
     this.schema = {
-      test: String
+      titre: String,
+      description: String,
+      picture: String,
+      note: Number,
+      countNote: Number,
+      link: String,
     };
   }
 };

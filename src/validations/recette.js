@@ -6,6 +6,10 @@ class RecetteValidation extends Validation {
         super(server);
     }
 
+    verifyData(recette) {
+        //TODO
+        return true;
+    }
 };
 
 module.exports = RecetteValidation;
