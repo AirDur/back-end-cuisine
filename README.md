@@ -56,6 +56,9 @@ Postman test collections is in test folder (file .postman_collection.json)
 
 ## Get API Documentation
 
+NEW DOCUMENTATION : https://cookingtodo.gitbook.io/cooking-todo
+
+
 Require [Docker Compose](https://docs.docker.com/compose/)
 Launch the app :
 
